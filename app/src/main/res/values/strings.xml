@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">GeoCodingAddressSearch</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="enter_an_addresss">Enter an address, place, etc</string>
+
+    <string name="loading_address">Loading Address...</string>
+
+    <string name="cd_products_list">Products list</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search">Search</string>
+
+    <string name="placeholder_nothing">%s</string>
+</resources>
