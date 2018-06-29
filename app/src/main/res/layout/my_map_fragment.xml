@@ -39,7 +39,6 @@
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/results_list"
-                android:name="acgmaps.com.searoth.geocodingaddresssearch.ItemFragment"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:background="@color/common_google_signin_btn_text_light_focused"
@@ -51,7 +50,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cl_search"
                 app:adapter="@{adapter}"
-                tools:context=".ItemFragment"
                 tools:listitem="@layout/my_result_item" />
 
             <TextView

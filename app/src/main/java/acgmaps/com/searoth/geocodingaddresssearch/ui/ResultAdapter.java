@@ -31,7 +31,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultView
     }
 
     public void setProductList(final List<? extends OurResult> productList) {
-        if (mResultList == null) {
+        if (productList.size() != 0) {
             mResultList = productList;
             notifyItemRangeInserted(0, productList.size());
         }
@@ -48,7 +48,8 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultView
     @Override
     public void onBindViewHolder(ResultViewHolder holder, int position) {
         holder.binding.setResult(mResultList.get(position));
-        String s = ""+position+1;
+        int pos = position + 1;
+        String s = ""+pos;
         holder.number.setText(s);
         holder.binding.executePendingBindings();
     }

@@ -142,8 +142,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MenuInt
         @Override
         public void onClick(OurResult product) {
             if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.STARTED)) {
+                isMarkerSelected = true;
                 mBinding.resultsList.setVisibility(View.GONE);
                 lastClickedMarker = convert(product);
+                doesMarkerExistInDb = checkIfMarkerExistsInDatabase(lastClickedMarker.getPlaceId());
                 setGoogleMap(product.getAddress(), product.getLatitude(), product.getLongitude(), product.getPlaceId());
                 getActivity().invalidateOptionsMenu();
             }
@@ -156,12 +158,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MenuInt
         String address = ourResult.getAddress();
         Double latitude = ourResult.getLatitude();
         Double longitude = ourResult.getLongitude();
-
         resultEntity.setPlaceId(placeId);
         resultEntity.setAddress(address);
         resultEntity.setLatitude(latitude);
         resultEntity.setLongitude(longitude);
-
         return resultEntity;
     }
 
@@ -178,15 +178,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MenuInt
             @Override
             public boolean onMarkerClick(Marker marker) {
                 isMarkerSelected = true;
-                doesMarkerExistInDb = false;
-                Log.i(TAG, "CLICKED " + marker.getSnippet());
-
-                List<ResultEntity> list = viewModel.getResults().getValue();
-                assert list != null;
-                for(ResultEntity entity : list){
-                    if(entity.getPlaceId().equals(marker.getSnippet()))
-                        doesMarkerExistInDb = true;
-                }
+                doesMarkerExistInDb = checkIfMarkerExistsInDatabase(marker.getId());
                 if(doesMarkerExistInDb)
                     getActivity().invalidateOptionsMenu();
                 return false;
@@ -194,6 +186,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MenuInt
         });
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
+    boolean checkIfMarkerExistsInDatabase(String placeId){
+        List<ResultEntity> mList = viewModel.getResults().getValue();
+
+        assert mList != null;
+        for(ResultEntity entity : mList){
+            if(entity.getPlaceId().equals(placeId))
+                return true;
+        }
+        return false;
     }
 
     @Override
@@ -284,10 +287,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MenuInt
         if(!isMarkerSelected){
             menu.findItem(R.id.action_save).setVisible(false);
             menu.findItem(R.id.action_delete).setVisible(false);
-        }else if(isMarkerSelected && !doesMarkerExistInDb) {
+        }else if(!doesMarkerExistInDb) {
             menu.findItem(R.id.action_save).setVisible(true);
             menu.findItem(R.id.action_delete).setVisible(false);
-        }else if(isMarkerSelected && doesMarkerExistInDb){
+        }else if(doesMarkerExistInDb){
             menu.findItem(R.id.action_save).setVisible(false);
             menu.findItem(R.id.action_delete).setVisible(true);
         }
@@ -304,12 +307,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MenuInt
 
     @Override
     public void deleteClicked() {
-
+        viewModel.removeOneItemFromDatabase(lastClickedMarker.getPlaceId());
     }
 
     @Override
     public void saveClicked() {
         viewModel.addNewItemToDatabase(lastClickedMarker);
+        doesMarkerExistInDb = true;
+        getActivity().invalidateOptionsMenu();
     }
 
     @Override
@@ -319,12 +324,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, MenuInt
 
     @Override
     public void populateClicked() {
-
+        viewModel.addRandomItems();
     }
 
     @Override
     public void showFavoritesClicked() {
-
+        List<ResultEntity> list = viewModel.getResults().getValue();
+        mResultAdapter.setProductList(list);
+        mBinding.resultsList.setAdapter(mResultAdapter);
+        mBinding.resultsList.setVisibility(View.VISIBLE);
     }
 
     private void enableSearch(boolean yesNo){

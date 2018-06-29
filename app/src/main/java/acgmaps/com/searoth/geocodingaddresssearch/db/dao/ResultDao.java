@@ -27,6 +27,9 @@ public interface ResultDao {
     @Query("select * from results where placeId = :productId")
     LiveData<ResultEntity> loadProduct(int productId);
 
+    @Query("DELETE FROM results where placeId = :productId")
+    void deleteLocation(String productId);
+
     @Query("DELETE FROM results")
     void deleteAll();
 }

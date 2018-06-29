@@ -39,6 +39,14 @@ public class MainActivity extends AppCompatActivity {
                 listener.searchClicked();
                 return true;
 
+            case R.id.action_view_favorites:
+                listener.showFavoritesClicked();
+                return true;
+
+            case R.id.action_remove_favorites:
+                listener.deleteAllClicked();
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -18,11 +18,12 @@ package acgmaps.com.searoth.geocodingaddresssearch.viewmodel;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MediatorLiveData;
-import android.database.Observable;
-import android.databinding.ObservableList;
+import android.arch.lifecycle.Observer;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 
 import java.util.List;
 
@@ -32,8 +33,10 @@ import acgmaps.com.searoth.geocodingaddresssearch.db.entity.ResultEntity;
 
 public class ResultListViewModel extends AndroidViewModel {
 
-    private final MediatorLiveData<List<ResultEntity>> mObservableResults;
-    private final LiveData<List<ResultEntity>> mCurrentList;
+    private final MediatorLiveData<List<ResultEntity>> mSavedLocations;
+
+
+
     private DataRepository repository;
 
     public ResultListViewModel(Application application) {
@@ -41,29 +44,32 @@ public class ResultListViewModel extends AndroidViewModel {
 
         repository = ((GeoMapApp) application).getRepository();
 
-        mObservableResults = new MediatorLiveData<>();
-        mObservableResults.setValue(null);
+        mSavedLocations = new MediatorLiveData<>();
+        mSavedLocations.setValue(null);
 
         LiveData<List<ResultEntity>> products = ((GeoMapApp) application).getRepository()
                 .getResults();
 
-        mObservableResults.addSource(products, mObservableResults::setValue);
-
-        mCurrentList = repository.getResults();
-    }
-
-    public LiveData<List<ResultEntity>> getmCurrentList() {
-        return mCurrentList;
-    }
-
-    public void setmCurrentList(List<ResultEntity> mCurrentList) {
+        mSavedLocations.addSource(products, mSavedLocations::setValue);
 
     }
+
+
 
     public LiveData<List<ResultEntity>> getResults() {
-        return mObservableResults;
+        return mSavedLocations;
     }
 
+    public void setmSavedLocations(List<ResultEntity> list){
+        mSavedLocations.setValue(list);
+    }
+
+
+    /**
+     * ADD ONE ITEM
+     *
+     * @param listItem
+     */
     public void addNewItemToDatabase(ResultEntity listItem){
         new AddItemTask().execute(listItem);
     }
@@ -77,16 +83,53 @@ public class ResultListViewModel extends AndroidViewModel {
         }
     }
 
-    public void deleteAllFromDb(){
-        repository.deleteAllItems();
+    /**
+     * DELETE ONE ITEM
+     *
+     */
+
+    public void removeOneItemFromDatabase(String placeId){
+        new RemoveLocation().execute(placeId);
     }
 
+    private class RemoveLocation extends AsyncTask<String, Void, Void>{
+        @Override
+        protected Void doInBackground(String... item){
+            repository.removeOneItem(item[0]);
+            return null;
+        }
+    }
+
+    /**
+     * DELETE ALL
+     *
+     */
+    public void deleteAllFromDb(){
+        new RemoveItems().execute();
+    }
+
+    private class RemoveItems extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            repository.deleteAllItems();
+            return null;
+        }
+    }
+
+    /**
+     * ADD RANDOM ITEMS
+     *
+     */
 
     public void addRandomItems(){
         ResultEntity resultEntity = new ResultEntity();
         resultEntity.setPlaceId("123");
         resultEntity.setAddress("21817 ne 20th way");
-        resultEntity.set
+
+        new AddItemTask().execute(resultEntity);
     }
+
+
 
 }

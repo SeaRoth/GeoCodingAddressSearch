@@ -61,6 +61,10 @@ public class DataRepository {
         mDatabase.resultDao().insertResult(resultEntity);
     }
 
+    public void removeOneItem(String placeId){
+        mDatabase.resultDao().deleteLocation(placeId);
+    }
+
     public void deleteAllItems(){
         mDatabase.resultDao().deleteAll();
     }
