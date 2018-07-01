@@ -1,8 +1,7 @@
 package acgmaps.com.searoth.geocodingaddresssearch.ui;
 
-import acgmaps.com.searoth.geocodingaddresssearch.model.OurResult;
-import se.arbitur.geocoding.Result;
+import acgmaps.com.searoth.geocodingaddresssearch.model.LocationModel;
 
 public interface LocationClickCallback {
-    void onClick(OurResult product);
+    void onClick(LocationModel product);
 }

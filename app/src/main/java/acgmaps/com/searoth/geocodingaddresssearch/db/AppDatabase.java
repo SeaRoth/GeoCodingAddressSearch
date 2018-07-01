@@ -13,19 +13,16 @@ import android.support.annotation.VisibleForTesting;
 import java.util.List;
 
 import acgmaps.com.searoth.geocodingaddresssearch.AppExecutors;
-import acgmaps.com.searoth.geocodingaddresssearch.db.dao.ResultDao;
-import acgmaps.com.searoth.geocodingaddresssearch.db.entity.ResultEntity;
+import acgmaps.com.searoth.geocodingaddresssearch.db.dao.LocationDao;
+import acgmaps.com.searoth.geocodingaddresssearch.db.entity.LocationEntity;
 
-@Database(entities = {ResultEntity.class},version = 1)
+@Database(entities = {LocationEntity.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase sInstance;
-
     @VisibleForTesting
     public static final String DATABASE_NAME = "my-maps-db";
-
-    public abstract ResultDao resultDao();
-
+    public abstract LocationDao resultDao();
     private final MutableLiveData<Boolean> mIsDatabaseCreated = new MutableLiveData<>();
 
     public static AppDatabase getInstance(final Context context, final AppExecutors executors) {
@@ -48,9 +45,6 @@ public abstract class AppDatabase extends RoomDatabase {
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {
                         super.onCreate(db);
                         executors.diskIO().execute(() -> {
-                            // Add a delay to simulate a long-running operation
-                            addDelay();
-                            // Generate the data for pre-population
                             AppDatabase database = AppDatabase.getInstance(appContext, executors);
                             database.setDatabaseCreated();
                         });
@@ -71,18 +65,11 @@ public abstract class AppDatabase extends RoomDatabase {
         mIsDatabaseCreated.postValue(true);
     }
 
-    private static void insertData(final AppDatabase database, final List<ResultEntity> products) {
+    private static void insertData(final AppDatabase database, final List<LocationEntity> locationEntities) {
         database.runInTransaction(() -> {
-            database.resultDao().insertAll(products);
+            database.resultDao().insertAll(locationEntities);
 
         });
-    }
-
-    private static void addDelay() {
-        try {
-            Thread.sleep(4000);
-        } catch (InterruptedException ignored) {
-        }
     }
 
     public LiveData<Boolean> getDatabaseCreated() {

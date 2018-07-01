@@ -1,7 +1,7 @@
 package acgmaps.com.searoth.geocodingaddresssearch.ui;
 
 public interface MenuInterface {
-    void searchClicked();
+    void menuSearchClicked();
     void deleteClicked();
     void saveClicked();
     void deleteAllClicked();

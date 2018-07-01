@@ -13,7 +13,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-
         if (savedInstanceState == null) {
             MapFragment fragment = new MapFragment();
             setListener(fragment);
@@ -36,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_search:
-                listener.searchClicked();
+                listener.menuSearchClicked();
                 return true;
 
             case R.id.action_view_favorites:
@@ -45,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.action_remove_favorites:
                 listener.deleteAllClicked();
+                return true;
+
+            case R.id.action_add_fake_favorites:
+                listener.populateClicked();
                 return true;
 
             default:

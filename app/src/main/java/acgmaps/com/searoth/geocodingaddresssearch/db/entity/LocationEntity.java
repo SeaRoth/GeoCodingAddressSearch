@@ -4,13 +4,15 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-import acgmaps.com.searoth.geocodingaddresssearch.model.OurResult;
+import acgmaps.com.searoth.geocodingaddresssearch.model.LocationModel;
+import se.arbitur.geocoding.Result;
 
-@Entity(tableName = "results")
-public class ResultEntity implements OurResult {
+@Entity(tableName = "locationentity")
+public class LocationEntity implements LocationModel {
     @PrimaryKey
     @NonNull
     private String placeId;
+    private String shortName;
     private String address;
     private Double latitude;
     private Double longitude;
@@ -52,20 +54,38 @@ public class ResultEntity implements OurResult {
         this.longitude = longitude;
     }
 
-    public ResultEntity() {
+    public LocationEntity() {
     }
 
-    public ResultEntity(String placeId, String address, Double latitude, Double longitude) {
+    public LocationEntity(@NonNull String placeId, String name, String address, Double latitude, Double longitude) {
         this.placeId = placeId;
+        this.shortName = name;
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
     }
 
-    public ResultEntity(OurResult product) {
+    public LocationEntity(Result result){
+        this.placeId = result.getPlaceId();
+        this.shortName = result.getAddressComponents()[0].getShortName();
+        this.address = result.getFormattedAddress();
+        this.latitude = result.getGeometry().getLocation().getLatitude();
+        this.longitude = result.getGeometry().getLocation().getLongitude();
+    }
+
+    public LocationEntity(LocationModel product) {
         this.placeId = product.getPlaceId();
+        this.shortName = product.getShortName();
         this.address = product.getAddress();
         this.latitude = product.getLatitude();
         this.longitude = product.getLongitude();
+    }
+
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 }

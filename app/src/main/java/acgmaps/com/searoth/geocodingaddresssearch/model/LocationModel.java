@@ -1,6 +1,7 @@
 package acgmaps.com.searoth.geocodingaddresssearch.model;
 
-public interface OurResult {
+public interface LocationModel {
+    String getShortName();
     String getPlaceId();
     String getAddress();
     Double getLatitude();

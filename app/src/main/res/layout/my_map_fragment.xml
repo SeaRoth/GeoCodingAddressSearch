@@ -12,17 +12,38 @@
 
         <variable
             name="viewmodel"
-            type="acgmaps.com.searoth.geocodingaddresssearch.viewmodel.ResultListViewModel" />
+            type="acgmaps.com.searoth.geocodingaddresssearch.viewmodel.LocationViewModel" />
         <variable
             name="adapter"
-            type="acgmaps.com.searoth.geocodingaddresssearch.ui.ResultAdapter" />
+            type="acgmaps.com.searoth.geocodingaddresssearch.ui.ListAdapter" />
 
     </data>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:id="@+id/myCoordinatorLayout"
+        android:layout_height="match_parent">
+
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/cl_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/loading_tv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/loading_address"
+                android:textAlignment="center"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:visibleGone="@{isLoading}" />
 
             <fragment
                 android:id="@+id/map"
@@ -30,6 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:tag="map"
+
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -40,30 +62,19 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/results_list"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="0dp"
                 android:background="@color/common_google_signin_btn_text_light_focused"
-                android:contentDescription="@string/cd_products_list"
-                android:maxHeight="300dp"
+                android:contentDescription="@string/cd_locations_list"
+                android:paddingTop="4dp"
                 android:visibility="visible"
+                app:adapter="@{adapter}"
                 app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_default="wrap"
+                app:layout_constraintHeight_max="300dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cl_search"
-                app:adapter="@{adapter}"
-                tools:listitem="@layout/my_result_item" />
-
-            <TextView
-                android:id="@+id/loading_tv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical|center_horizontal"
-                android:text="@string/loading_address"
-                android:textAlignment="center"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:visibleGone="@{isLoading}" />
+                tools:listitem="@layout/my_list_item" />
 
 
             <android.support.constraint.ConstraintLayout
@@ -89,9 +100,10 @@
                     android:layout_marginTop="8dp"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="@string/enter_an_addresss"
+                    android:hint="@string/enter_an_address"
                     android:inputType="textPersonName"
                     android:textColor="@color/common_google_signin_btn_text_dark_default"
+                    android:textColorHint="@android:color/background_light"
                     android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/btn_search"
@@ -124,7 +136,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:text="No Results Found!"
+                android:text="@string/no_results_found"
                 android:textColor="@color/common_google_signin_btn_text_dark_default"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -133,4 +145,5 @@
                 app:layout_constraintStart_toStartOf="@+id/results_list"
                 app:layout_constraintTop_toBottomOf="@+id/cl_search" />
         </android.support.constraint.ConstraintLayout>
+    </android.support.design.widget.CoordinatorLayout>
 </layout>

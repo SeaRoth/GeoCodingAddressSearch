@@ -2,36 +2,35 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- "Mark Favorite", should appear as action button if possible -->
     <item
         android:id="@+id/action_search"
         android:icon="@drawable/search"
-        android:title="SEARCH"
+        android:title="@string/search"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_save"
-        android:title="SAVE"
+        android:title="@string/save"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_delete"
-        android:title="DELETE"
+        android:title="@string/delete"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_view_favorites"
+        android:title="@string/favorites_show"
+        android:icon="@drawable/star"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_remove_favorites"
-        android:title="remove all fakeorites"
+        android:title="@string/remove_all_favorites"
         app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_add_fake_favorites"
-        android:title="add fakeorites to db"
+        android:title="@string/add_random_favorites"
         app:showAsAction="never"/>
-
-    <item
-        android:id="@+id/action_view_favorites"
-        android:title="favs"
-        android:icon="@drawable/star"
-        app:showAsAction="ifRoom"/>
 </menu>
