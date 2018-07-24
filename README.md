@@ -1,6 +1,6 @@
 # GeoCodingAddressSearch
 
-I was asked to build this app for a prospective employer.
+I was asked to build this app for an AvenueCode interview through Indeed Prime (ac-recruitment/android-challenge).
 
 https://play.google.com/store/apps/details?id=acgmaps.com.searoth.geocodingaddresssearch
 
